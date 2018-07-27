@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 
 var user = require('../common/user');
-var userUtils = require('../common/user/userUtils')
 
 router.post('/getTokenByCode', (req, res) => {
     user.getUserByCode(req.body.code, result => {

@@ -2,16 +2,18 @@ var pool = require('../pool');
 var config = require('../../../config/config');
 var sqlResult = require('../../../core/db/sqlResult');
 
-module.exports.selectUserByOpenid = (param, callback) => {
+module.exports.selectByOpenid = (param, callback) => {
+    console.log('===============')
     pool.getPool().getConnection((err, connection) => {
-        var sql = 'select ' + sqlResult.user + ' from v_user where isdel = 0 and openid = ?';
+        var sql = 'select ' + sqlResult.template + ' from v_template where isdel = 0 and openid = ? order by createtime limit 1';
         connection.query(sql, param, (err, result) => {
             if (err) {
                 console.log('[SELECT ERROR] - ', err.message);
                 return;
             }
             console.log('--------------------------SELECT----------------------------');
-            console.log('selectUserByOpenid:', result);
+            console.log('param:{}',param);
+            console.log('selectByOpenid:', result);
             console.log('-----------------------------------------------------------------');
             callback(result);
         });
@@ -20,45 +22,27 @@ module.exports.selectUserByOpenid = (param, callback) => {
     })
 };
 
-module.exports.selectUserById = (param, callback) => {
+module.exports.insertTemplate = (param) => {
     pool.getPool().getConnection((err, connection) => {
-        var sql = 'select ' + sqlResult.user + ' from v_user where isdel = 0 and id = ?';
-        connection.query(sql, param, (err, result) => {
-            if (err) {
-                console.log('[SELECT ERROR] - ', err.message);
-                return;
-            }
-            console.log('--------------------------SELECT----------------------------');
-            console.log('selectUserByOpenid:', result);
-            console.log('-----------------------------------------------------------------');
-            callback(result);
-        });
-
-        connection.release();
-    })
-};
-
-module.exports.insertTemporaryUser = (param, callback) => {
-    pool.getPool().getConnection((err, connection) => {
-        var sql = 'insert into v_user (openid) values (?)';
+        var sql = 'insert into v_template (openid,form_id) values (?,?)';
         connection.query(sql, param, (err, result) => {
             if (err) {
                 console.log('[INSERT ERROR] - ', err.message);
                 return;
             }
             console.log('--------------------------INSERT----------------------------');
+            console.log('param:{}',param);
             console.log('insertTemporaryUser:', result);
             console.log('-----------------------------------------------------------------');
-            callback(result);
         });
 
         connection.release();
     })
 };
 
-module.exports.updateUserByAll = (param) => {
+module.exports.updateTemplate = (param) => {
     pool.getPool().getConnection((err, connection) => {
-        var sql = 'update v_user set nick_name = ?,avatar_url = ?,gender = ?,country = ?,province = ?,city = ? where openid = ?';
+        var sql = 'update v_template set isdel = 1 where id = ?';
         connection.query(sql, param, (err, result) => {
             if (err) {
                 console.log('[UPDATE ERROR] - ', err.message);
