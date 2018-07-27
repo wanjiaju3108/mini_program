@@ -15,7 +15,7 @@ module.exports.getToken = (callback) => {
     })
 };
 
-module.exports.sendTemplate = (id, accessToken) => {
+module.exports.sendTemplate = (id, accessToken, templateId, data) => {
     userDb.selectUserById([id], userResult => {
         var openid = userResult[0].openid;
         templateDb.selectByOpenid([id], templateResult => {
@@ -30,25 +30,9 @@ module.exports.sendTemplate = (id, accessToken) => {
                 },
                 body: {
                     "touser": openid,
-                    "template_id": config.buyTemplateId,
+                    "template_id": templateId,
                     "form_id": formId,
-                    "data": {
-                        "keyword1": {
-                            "value": "2016年6月6日"
-                        },
-                        "keyword2": {
-                            "value": "咖啡"
-                        },
-                        "keyword3": {
-                            "value": "23432132"
-                        },
-                        "keyword4": {
-                            "value": "9601101256898452"
-                        },
-                        "keyword5": {
-                            "value": "10元"
-                        }
-                    },
+                    "data": data,
                 }
             })
         });
@@ -56,5 +40,28 @@ module.exports.sendTemplate = (id, accessToken) => {
 };
 
 module.exports.pushFormId = (id, formId) => {
-    templateDb.insertTemplate([id,formId])
+    templateDb.insertTemplate([id, formId])
+};
+
+module.exports.getTemplateData = (type, callback) => {
+    if (type == 1) {
+        var data = {
+            "keyword1": {
+                "value": "2016年6月6日"
+            },
+            "keyword2": {
+                "value": "咖啡"
+            },
+            "keyword3": {
+                "value": "23432132"
+            },
+            "keyword4": {
+                "value": "9601101256898452"
+            },
+            "keyword5": {
+                "value": "10元"
+            }
+        };
+        callback(data)
+    }
 };

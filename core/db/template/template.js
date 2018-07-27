@@ -1,5 +1,4 @@
 var pool = require('../pool');
-var config = require('../../../config/config');
 var sqlResult = require('../../../core/db/sqlResult');
 
 module.exports.selectByOpenid = (param, callback) => {

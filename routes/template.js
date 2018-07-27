@@ -1,18 +1,21 @@
 var userUtiles = require('../common/user/userUtils');
+var config = require('../config/config');
+var template = require('../common/template');
 var express = require('express');
 var router = express.Router();
 
-var template = require('../common/template');
 
-router.post('/sendTemplate', (req, res) => {
+router.post('/sendBuyTemplate', (req, res) => {
     template.getToken(result => {
-        template.sendTemplate(userUtiles.getId(req.body.token), result)
+        template.getTemplateData(1, data => {
+            template.sendTemplate(userUtiles.getId(req.body.token), result, config.buyTemplateId, data)
+        });
     });
     res.end("")
 });
 
 router.post('/pushFormId', (req, res) => {
-    template.pushFormId(userUtiles.getId(req.body.token), req.body.formId)
+    template.pushFormId(userUtiles.getId(req.body.token), req.body.formId);
     res.end("")
 });
 
