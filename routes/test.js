@@ -1,8 +1,5 @@
-var uuid = require('../common/utils/uuid');
-var userWx = require('../common/user/userWx');
-var WXBizDataCrypt = require('../common/user/WXBizDataCrypt')
+var www = require('../bin/www');
 module.exports = (req, res) => {
-    userWx.getUserByCode(req.body.code, (x) => {
-        res.end(JSON.stringify(x))
-    })
+    www.sendWsMessage(req.body.message)
+    res.end('')
 };
